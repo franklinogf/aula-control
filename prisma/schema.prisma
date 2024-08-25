@@ -1,0 +1,235 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model School {
+  id       Int    @id @default(autoincrement())
+  name     String @unique @db.VarChar(200)
+  gradeMax Int    @default(30) @db.UnsignedSmallInt()
+  year     String @db.Char(5)
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique @db.VarChar(150)
+  password String @db.VarChar(100)
+  roleId   String @db.VarChar(100)
+  role     Role   @relation(fields: [roleId], references: [type])
+  year     String @db.Char(5)
+
+  Parent  Parent[]
+  Teacher Teacher[]
+  Student Student[]
+
+  @@map("users")
+}
+
+model Role {
+  type String @id @unique @db.VarChar(100)
+  user User[]
+
+  @@map("roles")
+}
+
+model Parent {
+  id             Int       @id @default(autoincrement())
+  fatherName     String    @db.VarChar(100)
+  fatherLastname String    @db.VarChar(100)
+  motherName     String    @db.VarChar(100)
+  motherLastname String    @db.VarChar(100)
+  phone          String    @unique @db.VarChar(15)
+  fatherEmail    String    @unique @db.VarChar(200)
+  motherEmail    String    @unique @db.VarChar(200)
+  userId         Int
+  user           User      @relation(fields: [userId], references: [id])
+  students       Student[]
+  year           String    @db.Char(5)
+  deleteAt       DateTime?
+
+  @@map("parents")
+}
+
+model Teacher {
+  id            Int       @id @default(autoincrement())
+  name          String    @db.VarChar(100)
+  lastname      String    @db.VarChar(100)
+  phone         String    @unique @db.VarChar(15)
+  email         String    @unique @db.VarChar(200)
+  dob           DateTime  @db.Date()
+  userId        Int
+  user          User      @relation(fields: [userId], references: [id])
+  grade         Grade?
+  knownSubjects Json
+  year          String    @db.Char(5)
+  courses       Course[]
+  deleteAt      DateTime?
+  Post          Post[]
+
+  @@map("teachers")
+}
+
+model Grade {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique @db.VarChar(10)
+  teacherId Int       @unique
+  teacher   Teacher   @relation(fields: [teacherId], references: [id])
+  courses   Course[]
+  students  Student[]
+  deleteAt  DateTime?
+  Post      Post[]
+
+  @@map("grades")
+}
+
+model Subject {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique @db.VarChar(30)
+  courses  Course[]
+  Note     Note[]
+  deleteAt DateTime?
+
+  @@map("subjects")
+}
+
+model Student {
+  id         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(100)
+  lastname   String       @db.VarChar(100)
+  phone      String       @unique @db.VarChar(15)
+  email      String       @unique @db.VarChar(200)
+  dob        DateTime     @db.Date()
+  userId     Int
+  user       User         @relation(fields: [userId], references: [id])
+  parentId   Int
+  parent     Parent       @relation(fields: [parentId], references: [id])
+  gradeId    Int
+  grade      Grade        @relation(fields: [gradeId], references: [id])
+  year       String       @db.Char(5)
+  Note       Note[]
+  Attendance Attendance[]
+  deleteAt   DateTime?
+  Conduct    Conduct[]
+  Report     Report[]
+
+  @@map("students")
+}
+
+model Course {
+  id        Int       @id @default(autoincrement())
+  gradeId   Int
+  grade     Grade     @relation(fields: [gradeId], references: [id])
+  subjectId Int
+  subject   Subject   @relation(fields: [subjectId], references: [id])
+  teacherId Int
+  teacher   Teacher   @relation(fields: [teacherId], references: [id])
+  day       String    @db.Char(1)
+  time      DateTime  @db.Time()
+  year      String    @db.Char(5)
+  deleteAt  DateTime?
+
+  @@map("courses")
+}
+
+model Note {
+  id        Int     @id @default(autoincrement())
+  subjectId Int
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  studentId Int
+  student   Student @relation(fields: [studentId], references: [id])
+
+  note1    Int? @db.UnsignedSmallInt()
+  note2    Int? @db.UnsignedSmallInt()
+  note3    Int? @db.UnsignedSmallInt()
+  note4    Int? @db.UnsignedSmallInt()
+  average1 Int? @db.UnsignedSmallInt()
+  exam1    Int? @db.UnsignedSmallInt()
+
+  note5    Int? @db.UnsignedSmallInt()
+  note6    Int? @db.UnsignedSmallInt()
+  note7    Int? @db.UnsignedSmallInt()
+  note8    Int? @db.UnsignedSmallInt()
+  average2 Int? @db.UnsignedSmallInt()
+  exam2    Int? @db.UnsignedSmallInt()
+
+  year     String    @db.Char(5)
+  deleteAt DateTime?
+
+  @@map("notes")
+}
+
+model AttendanceOption {
+  name        String       @id @unique @db.Char(2)
+  description String       @db.VarChar(150)
+  Attendance  Attendance[]
+  deleteAt    DateTime?
+
+  @@map("attendace_options")
+}
+
+model Attendance {
+  id                 Int              @id @default(autoincrement())
+  studentId          Int
+  student            Student          @relation(fields: [studentId], references: [id])
+  date               DateTime         @db.Date()
+  attendanceOptionId String           @db.Char(2)
+  attendanceOption   AttendanceOption @relation(fields: [attendanceOptionId], references: [name])
+  year               String           @db.Char(5)
+  deleteAt           DateTime?
+
+  @@map("attendances")
+}
+
+model Conduct {
+  id          Int      @id @default(autoincrement())
+  studentId   Int
+  student     Student  @relation(fields: [studentId], references: [id])
+  date        DateTime @db.Date()
+  description String?
+  year        String   @db.Char(5)
+}
+
+model Report {
+  id          Int      @id @default(autoincrement())
+  studentId   Int
+  student     Student  @relation(fields: [studentId], references: [id])
+  description String   @db.Text
+  date        DateTime @db.Date()
+  year        String   @db.Char(5)
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(150)
+  description String    @db.VarChar(200)
+  teacherId   Int
+  teacher     Teacher   @relation(fields: [teacherId], references: [id])
+  gradeId     String
+  grade       Grade     @relation(fields: [gradeId], references: [name])
+  year        String    @db.Char(5)
+  Comment     Comment[]
+}
+
+enum AuthorModel {
+  parent
+  teacher
+}
+
+model Comment {
+  id          Int         @id @default(autoincrement())
+  postId      Int
+  post        Post        @relation(fields: [postId], references: [id])
+  authorId    Int
+  authorModel AuthorModel
+  comment     String      @db.Text
+}

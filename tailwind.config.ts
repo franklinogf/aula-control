@@ -1,3 +1,4 @@
+import { url } from "inspector"
 import type { Config } from "tailwindcss"
 
 const config = {
@@ -19,6 +20,10 @@ const config = {
     },
     extend: {
       colors: {
+        admin: {
+          DEFAULT: "#343a40",
+          foreground: "#ffffff"
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

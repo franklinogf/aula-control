@@ -1,7 +1,12 @@
+import { LogInFormModal } from "@/components/LogInFormModal";
+
 export default function Home() {
   return (
-    <>
-      <h1 className="px-28 font-bold">hola</h1>
-    </>
+    <main className="flex h-dvh items-center justify-center bg-[url(/pila-libros.avif)] bg-cover bg-center bg-no-repeat">
+      <div className="flex flex-col items-center justify-center gap-y-8">
+        <h1 className="text-6xl font-bold text-white">AulaControl</h1>
+        <LogInFormModal />
+      </div>
+    </main>
   );
 }
