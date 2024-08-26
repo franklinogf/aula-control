@@ -13,6 +13,7 @@ declare module "next-auth" {
     user: {
       /** The user's postal address. */
       username: string
+      email: string
       roleId:string
       id:number
       year:string
@@ -23,6 +24,7 @@ declare module "next-auth" {
     
       /** The user's postal address. */
       username?: string | null 
+      email?: string | null
       roleId:string
       id?:string
       year:string
@@ -90,7 +92,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         user: {
           ...session.user,
           id: token.id,
-          email: token.email,
+          username: token.email,
           roleId: token.roleId,
           year: token.year
         },

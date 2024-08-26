@@ -11,3 +11,12 @@ export const signInSchema = z.object({
       .min(8, "Password must be more than 8 characters")
       .max(32, "Password must be less than 32 characters"),
   });
+
+  export const gradeSchema = z.object({
+    grade: z
+    .string({required_error:"El grado es requerido."})
+    .min(2, "Minimo 2 caracteres."),
+    teacher: z.coerce
+    .number()
+    .optional()
+  })

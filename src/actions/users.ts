@@ -1,9 +1,9 @@
 'use server'
 
 import { signIn, signOut } from "../auth"
-import { PrismaClient,Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
-const prisma = new PrismaClient()
+import prisma from '../../prisma/db'
 type UserCreate = Prisma.Args<typeof prisma.user, 'create'>['data']
 type UserSelect = Prisma.Args<typeof prisma.user, 'findFirst'>['where']
 
