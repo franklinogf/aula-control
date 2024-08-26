@@ -1,5 +1,6 @@
 'use server'
 
+import { signIn, signOut } from "../auth"
 import { PrismaClient,Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient()
@@ -26,11 +27,32 @@ export async function createUser(data:UserCreate) {
 }
 export async function getUser(where?: UserSelect) {
     try {
-        const user  = prisma.user.findFirst({where})
+        const user  = prisma.user.findFirst({select:{username:true,roleId:true,year:true,id:true},where})
         return user
     } catch (error) {
         console.log(error)
     }
 }
+export async function signInUser(username:string,password:string){
+    try {
+        const  result = await signIn("credentials",{email:username,password,redirect:false})
+
+        return true
+    } catch (error) {
+        return false
+    }
+    
+}
+export async function logOutUser(){
+    try {
+        const result = await signOut()
+console.log({result})
+        return true
+    } catch (error) {
+        return false
+    }
+    
+}
+
 
 

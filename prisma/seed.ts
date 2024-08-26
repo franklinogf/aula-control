@@ -18,8 +18,17 @@ async function main() {
       {name: 'e',description:'Excusa'},
     ]
   })
+
+  const adminUser = await prisma.user.create({
+    data:{
+      username: "admin@admin.com",
+      password: "12345678",
+      year: "24-25",
+      roleId: "admin"
+    }
+  })
   
-  console.log({ roles, attendaceOptions})
+  console.log({ roles, attendaceOptions, adminUser})
 }
 main()
   .then(async () => {

@@ -1,4 +1,6 @@
 import { getAllUsers } from "@/actions/users";
+import { auth } from "@/auth";
+import { LogOutButton } from "@/components/LogOutButton";
 import { Stat } from "@/components/Stat";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +14,8 @@ import {
 import { RoleEnum } from "@/enums";
 
 export default async function page() {
+  const session = await auth();
+
   const users = await getAllUsers();
   const teacherUsers = await getAllUsers({ roleId: RoleEnum.TEACHER });
   const parentUsers = await getAllUsers({ roleId: RoleEnum.PARENT });
@@ -33,9 +37,7 @@ export default async function page() {
           <Button variant="outline" className="bg-admin text-admin-foreground">
             Grados
           </Button>
-          <Button variant="destructive" className="hover:bg-red-600">
-            Cerrar sesion
-          </Button>
+          <LogOutButton />
         </div>
       </aside>
       <div className="grow px-4">

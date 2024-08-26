@@ -1,8 +1,11 @@
 "use client";
 
-import { signIn } from "@/auth";
+import { signInUser } from "@/actions/users";
+import { signInSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "./ui/button";
 import {
@@ -16,23 +19,22 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 
-const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
 export function LogInFormModal() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const router = useRouter();
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    // console.log(hashPassword(values.password));
-    const session = await signIn("credentials", values);
-    // console.log(session);
+  async function onSubmit(values: z.infer<typeof signInSchema>) {
+    const result = await signInUser(values.email, values.password);
+    if (result) {
+      router.push("/admin");
+    } else {
+      toast.error("Error al iniciar sesion");
+    }
   }
   return (
     <div>
