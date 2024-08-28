@@ -18,11 +18,11 @@ const asideMenu = [
   },
   {
     label: "Grados",
-    link: "/grades",
+    link: "/admin/grades",
   },
   {
     label: "Materias",
-    link: "/subjects",
+    link: "/admin/subjects",
   },
 ];
 export default async function AdminLayout({
