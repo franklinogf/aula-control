@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { CustomFormField, FormFieldType } from "./CustomFormField";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -16,8 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
+import { Form } from "./ui/form";
 
 export function LogInFormModal() {
   const router = useRouter();
@@ -49,32 +49,21 @@ export function LogInFormModal() {
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
+              <CustomFormField
                 control={form.control}
+                fieldType={FormFieldType.INPUT}
+                label="Correo electronico"
+                type="email"
                 name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your email here" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
               />
-              <FormField
+              <CustomFormField
                 control={form.control}
+                fieldType={FormFieldType.INPUT}
+                type="password"
                 name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your password here" {...field} type="password" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Contraseña"
               />
+
               <div className="flex justify-center">
                 <Button type="submit">Sign in</Button>
               </div>
