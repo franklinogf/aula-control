@@ -82,6 +82,7 @@ model Teacher {
 model Grade {
   id        Int       @id @default(autoincrement())
   name      String    @unique @db.VarChar(10)
+  year          String    @db.Char(5)
   teacherId Int?      @unique
   teacher   Teacher?  @relation(fields: [teacherId], references: [id])
   courses   Course[]

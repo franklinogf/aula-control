@@ -1,5 +1,6 @@
 "use client";
-import { createGrade } from "@/actions/grades";
+import { createGrade, editGrade } from "@/actions/grades";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { gradeSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -23,19 +25,28 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-export function GradesFormModal() {
+interface GradesFormModalProps {
+  mode?: "new" | "edit";
+  id?: number;
+  grade?: string;
+}
+export function GradesFormModal({ mode = "new", id, grade = "" }: GradesFormModalProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const form = useForm<z.infer<typeof gradeSchema>>({
     resolver: zodResolver(gradeSchema),
     defaultValues: {
-      grade: "",
+      grade,
     },
   });
-  async function onSubmit(values: z.infer<typeof gradeSchema>) {
-    const result = await createGrade(values.grade, values.teacher);
+  async function onSubmit({ grade, teacher }: z.infer<typeof gradeSchema>) {
+    let result;
+    if (mode === "new") {
+      result = await createGrade({ grade, teacher });
+    } else {
+      if (!id) return;
+      result = await editGrade({ grade, teacher, id });
+    }
     if (result) {
       router.refresh();
       form.reset();
@@ -47,11 +58,11 @@ export function GradesFormModal() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Agregar</Button>
+        <Button>{mode === "new" ? "Agregar" : "Editar"}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Agregar grado.</DialogTitle>
+          <DialogTitle>{mode === "new" ? "Agregar grado" : "Editar grado"}</DialogTitle>
           <DialogDescription></DialogDescription>
           <Form {...form}>
             <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
@@ -82,7 +93,7 @@ export function GradesFormModal() {
                 )}
               />
               <div className="flex justify-center">
-                <Button type="submit">Agregar</Button>
+                <Button type="submit">{mode === "new" ? "Agregar" : "Editar"}</Button>
               </div>
             </form>
           </Form>
