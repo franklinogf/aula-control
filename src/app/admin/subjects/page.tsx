@@ -1,33 +1,16 @@
-import { GradesFormModal } from "@/components/GradesFormModal";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { getAllSubjectsWithTrash } from "@/actions/subjects";
+import { SubjectFormModal } from "@/components/SubjectsFormModal";
+import SubjectTable from "./_components/SubjectTable";
 
-export default function Page() {
+export default async function Page() {
+  const subjects = await getAllSubjectsWithTrash();
+
   return (
     <div className="mt-10">
-      <h3 className="mb-4 text-2xl font-semibold">Grados</h3>
-      <GradesFormModal />
+      <h3 className="mb-4 text-2xl font-semibold">Materias</h3>
+      <SubjectFormModal />
       <div className="mt-4">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>Materia</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        {subjects ? <SubjectTable subjects={subjects} /> : "No hay materias"}
       </div>
     </div>
   );

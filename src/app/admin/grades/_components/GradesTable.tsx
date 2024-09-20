@@ -50,7 +50,7 @@ export default function GradesTable({ grades }: { grades: Grade[] }) {
             <TableCell>{grade.teacherId}</TableCell>
             <TableCell>
               <div className="flex gap-2">
-                <GradesFormModal mode="edit" id={grade.id} grade={grade.name} />
+                <GradesFormModal mode="edit" grade={grade} />
                 {grade.deleteAt !== null ? (
                   <>
                     <Button

@@ -10,11 +10,11 @@ const asideMenu = [
   },
   {
     label: "Padres",
-    link: "/parents",
+    link: "/admin/parents",
   },
   {
     label: "Profesores",
-    link: "/teachers",
+    link: "/admin/teachers",
   },
   {
     label: "Grados",

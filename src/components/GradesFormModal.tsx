@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { gradeSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Grade } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -28,15 +29,15 @@ import { z } from "zod";
 interface GradesFormModalProps {
   mode?: "new" | "edit";
   id?: number;
-  grade?: string;
+  grade?: Grade;
 }
-export function GradesFormModal({ mode = "new", id, grade = "" }: GradesFormModalProps) {
+export function GradesFormModal({ mode = "new", grade: itemToEdit }: GradesFormModalProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const form = useForm<z.infer<typeof gradeSchema>>({
     resolver: zodResolver(gradeSchema),
     defaultValues: {
-      grade,
+      grade: itemToEdit ? itemToEdit.name : "",
     },
   });
   async function onSubmit({ grade, teacher }: z.infer<typeof gradeSchema>) {
@@ -44,21 +45,24 @@ export function GradesFormModal({ mode = "new", id, grade = "" }: GradesFormModa
     if (mode === "new") {
       result = await createGrade({ grade, teacher });
     } else {
-      if (!id) return;
-      result = await editGrade({ grade, teacher, id });
+      if (!itemToEdit) return;
+      result = await editGrade({ grade, teacher, id: itemToEdit.id });
     }
     if (result) {
+      toast.success(mode === "new" ? "Grado agregado!" : "Grado editado!");
       router.refresh();
       form.reset();
       setIsOpen(false);
     } else {
-      toast.error("Error al agregar grado");
+      toast.error("Error al agregar grado!");
     }
   }
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>{mode === "new" ? "Agregar" : "Editar"}</Button>
+        <Button size={mode === "new" ? "default" : "sm"}>
+          {mode === "new" ? "Agregar" : "Editar"}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
