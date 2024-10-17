@@ -53,7 +53,7 @@ export async function getGradeById(id: number) {
 
 export async function getAllGrades(where?: GradeSelect) {
   const year = await getYear();
-  if (!year) return false;
+  if (!year) return [];
   try {
     const result = await prisma.grade.findMany({ where: { year, deleteAt: null, ...where } });
     return result;
