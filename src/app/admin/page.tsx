@@ -1,3 +1,4 @@
+import { getAllGrades } from "@/actions/grades";
 import { getAllUsers } from "@/actions/users";
 import { auth } from "@/auth";
 import { Stat } from "@/components/Stat";
@@ -14,9 +15,12 @@ import { RoleEnum } from "@/enums";
 export default async function page() {
   const session = await auth();
 
-  const users = await getAllUsers();
-  const teacherUsers = await getAllUsers({ roleId: RoleEnum.TEACHER });
-  const parentUsers = await getAllUsers({ roleId: RoleEnum.PARENT });
+  const [users, teacherUsers, parentUsers, grades] = await Promise.all([
+    await getAllUsers(),
+    await getAllUsers({ roleId: RoleEnum.TEACHER }),
+    await getAllUsers({ roleId: RoleEnum.PARENT }),
+    await getAllGrades(),
+  ]);
 
   return (
     <div>
@@ -29,7 +33,7 @@ export default async function page() {
           value={teacherUsers?.length ?? 0}
         />
         <Stat background="bg-amber-800" title="Cantidad de usuarios" value={users?.length ?? 0} />
-        <Stat background="bg-purple-500" title="Cantidad de grados" value={0} />
+        <Stat background="bg-purple-500" title="Cantidad de grados" value={grades?.length ?? 0} />
       </div>
       <div className="mt-10">
         <h3 className="mb-4 text-2xl font-semibold">Ultimos Usuarios Agregados</h3>

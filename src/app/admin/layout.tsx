@@ -10,11 +10,11 @@ const asideMenu = [
   },
   {
     label: "Padres",
-    link: "/parents",
+    link: "/admin/parents",
   },
   {
     label: "Profesores",
-    link: "/teachers",
+    link: "/admin/teachers",
   },
   {
     label: "Grados",
@@ -36,7 +36,7 @@ export default async function AdminLayout({
   }
   return (
     <div className="flex min-h-screen">
-      <aside className="max-w-[200px] bg-admin text-center">
+      <aside className="w-full max-w-[200px] bg-admin text-center">
         <h3 className="my-3 text-4xl font-semibold text-admin-foreground">Admin Panel</h3>
         <div className="mx-4 flex flex-col gap-4">
           {asideMenu.map((item) => (

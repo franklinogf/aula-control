@@ -13,6 +13,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 model School {
   id       Int    @id @default(autoincrement())
   name     String @unique @db.VarChar(200)
@@ -44,13 +48,14 @@ model Role {
 
 model Parent {
   id             Int       @id @default(autoincrement())
-  fatherName     String    @db.VarChar(100)
-  fatherLastname String    @db.VarChar(100)
-  motherName     String    @db.VarChar(100)
-  motherLastname String    @db.VarChar(100)
-  phone          String    @unique @db.VarChar(15)
-  fatherEmail    String    @unique @db.VarChar(200)
-  motherEmail    String    @unique @db.VarChar(200)
+  fatherName     String?   @db.VarChar(100)
+  fatherLastname String?   @db.VarChar(100)
+  motherName     String?   @db.VarChar(100)
+  motherLastname String?   @db.VarChar(100)
+  fatherPhone    String?   @unique @db.VarChar(15)
+  motherPhone    String?   @unique @db.VarChar(15)
+  fatherEmail    String?   @unique @db.VarChar(200)
+  motherEmail    String?   @unique @db.VarChar(200)
   userId         Int
   user           User      @relation(fields: [userId], references: [id])
   students       Student[]
@@ -82,6 +87,7 @@ model Teacher {
 model Grade {
   id        Int       @id @default(autoincrement())
   name      String    @unique @db.VarChar(10)
+  year      String    @db.Char(5)
   teacherId Int?      @unique
   teacher   Teacher?  @relation(fields: [teacherId], references: [id])
   courses   Course[]

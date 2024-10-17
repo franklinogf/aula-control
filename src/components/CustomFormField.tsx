@@ -2,7 +2,7 @@ import { E164Number } from "libphonenumber-js/core";
 import ReactDatePicker from "react-datepicker";
 import { Control } from "react-hook-form";
 import PhoneInput from "react-phone-number-input";
-
+import "react-phone-number-input/style.css";
 import { Checkbox } from "./ui/checkbox";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
@@ -97,9 +97,13 @@ const RenderInput = ({ field, props }: { field: any; props: CustomFormFieldProps
       return (
         <FormControl>
           <PhoneInput
-            defaultCountry="US"
+            disabled={props.disabled}
+            numberInputProps={{ className: "input-phone-input" }}
+            defaultCountry="DO"
+            countries={["DO"]}
             placeholder={props.placeholder}
-            international
+            // international
+            addInternationalOption={false}
             withCountryCallingCode
             value={field.value as E164Number | undefined}
             onChange={field.onChange}
