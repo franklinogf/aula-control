@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const signInSchema = z.object({
-  email: z.string().min(1, "El correo es requerido").email("Correo invalido"),
+  email: z.string().min(1, "El usuario es requerido"),
   password: z
     .string()
     .min(1, "La contraseña es requerida")
@@ -114,6 +114,32 @@ export const parentEditSchema = z
 
 export const parentCreateSchema = z.intersection(
   parentEditSchema,
+  z.object({
+    password: z
+      .string({ required_error: "La contraseña es requerida" })
+      .min(8, "La contraseña debe de tener 8 caracteres como minimo")
+      .transform((e) => (e === "" ? null : e)),
+  }),
+);
+
+export const teacherEditSchema = z.object({
+  name: z.string().min(1, "El nombre es requerido."),
+  lastname: z.string().min(1, "El apellido es requerido."),
+  phone: z.string().min(1, "El numero de celular es requerido."),
+  email: z.string().min(1, "El correo es requerido."),
+  username: z.string().min(1, "El nombre de usuario es requerido."),
+  dob: z.date(),
+  grade: z.string().optional(),
+  knownSubjects: z.array(z.string()).optional(),
+  password: z
+    .string({ required_error: "La contraseña es requerida" })
+    .min(8, "La contraseña debe de tener 8 caracteres como minimo")
+    .optional()
+    .or(z.literal(""))
+    .transform((e) => (e === "" ? null : e)),
+});
+export const teacherCreateSchema = z.intersection(
+  teacherEditSchema,
   z.object({
     password: z
       .string({ required_error: "La contraseña es requerida" })

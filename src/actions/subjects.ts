@@ -51,6 +51,7 @@ export async function getAllSubjects(where?: SubjectSelect) {
     return result;
   } catch (error) {
     console.log(error);
+    return [];
   }
 }
 export async function getAllSubjectsWithTrash(where?: SubjectSelect) {
@@ -59,6 +60,7 @@ export async function getAllSubjectsWithTrash(where?: SubjectSelect) {
     return result;
   } catch (error) {
     console.log(error);
+    return [];
   }
 }
 
