@@ -74,7 +74,7 @@ export default function GradesTable({ grades }: { grades: Grade[] }) {
                     size="sm"
                     variant="destructive"
                   >
-                    Eliminar
+                    Deshabilitar
                   </Button>
                 )}
               </div>

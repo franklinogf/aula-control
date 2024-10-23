@@ -147,3 +147,9 @@ export const teacherCreateSchema = z.intersection(
       .transform((e) => (e === "" ? null : e)),
   }),
 );
+
+export const configSchema = z.object({
+  year: z.string().min(1, "El año es requerido."),
+  name: z.string().min(1, "El nombre es requerido."),
+  gradeMax: z.number().min(1, "El máximo de grados es requerido."),
+});

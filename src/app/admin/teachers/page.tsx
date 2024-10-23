@@ -4,7 +4,6 @@ import TeachersTable from "./_components/TeachersTable";
 
 export default async function Page() {
   const teachers = await getAllTeachersWithTrash();
-  console.log({ teachers });
   return (
     <div className="mt-10">
       <h3 className="mb-4 text-2xl font-semibold">Profesores</h3>

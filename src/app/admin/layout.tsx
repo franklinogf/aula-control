@@ -24,6 +24,10 @@ const asideMenu = [
     label: "Materias",
     link: "/admin/subjects",
   },
+  {
+    label: "Configuración",
+    link: "/admin/config",
+  },
 ];
 export default async function AdminLayout({
   children,
@@ -40,7 +44,12 @@ export default async function AdminLayout({
         <h3 className="my-3 text-4xl font-semibold text-admin-foreground">Admin Panel</h3>
         <div className="mx-4 flex flex-col gap-4">
           {asideMenu.map((item) => (
-            <Button key={item.label} variant="outline" className="bg-admin text-admin-foreground">
+            <Button
+              asChild
+              key={item.label}
+              variant="outline"
+              className="bg-admin text-admin-foreground"
+            >
               <Link href={item.link}>{item.label}</Link>
             </Button>
           ))}

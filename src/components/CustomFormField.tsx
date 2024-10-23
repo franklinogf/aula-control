@@ -100,7 +100,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomFormFieldProps
       return (
         <div className="border-dark-500 bg-dark-400 flex rounded-md border">
           <FormControl>
-            <Input disabled={props.disabled} {...props} {...field} />
+            <Input disabled={props.disabled} {...field} />
           </FormControl>
         </div>
       );

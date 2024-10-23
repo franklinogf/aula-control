@@ -36,7 +36,6 @@ export function TeachersFormModal({
   const [isOpen, setIsOpen] = useState(false);
   const [grades, setGrades] = useState<Grade[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  console.log({ itemToEdit });
   const form = useForm<z.infer<typeof teacherEditSchema | typeof teacherCreateSchema>>({
     resolver: zodResolver(itemToEdit ? teacherEditSchema : teacherCreateSchema),
     defaultValues: {
@@ -95,7 +94,7 @@ export function TeachersFormModal({
       </DialogTrigger>
       <DialogContent className="w-full max-w-2xl">
         <DialogHeader>
-          <DialogTitle>{mode === "new" ? "Agregar padre" : "Editar padre"}</DialogTitle>
+          <DialogTitle>{mode === "new" ? "Agregar profesor" : "Editar profesor"}</DialogTitle>
           <DialogDescription></DialogDescription>
           <Form {...form}>
             <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>

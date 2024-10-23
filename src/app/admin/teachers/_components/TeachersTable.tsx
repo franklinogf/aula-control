@@ -68,7 +68,7 @@ export default function TeachersTable({ teachers }: TeachersTableType) {
                   </>
                 ) : (
                   <Button onClick={() => handleDelete(teacher.id)} size="sm" variant="destructive">
-                    Eliminar
+                    Deshabilitar
                   </Button>
                 )}
               </div>

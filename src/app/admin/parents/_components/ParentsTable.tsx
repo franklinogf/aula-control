@@ -68,7 +68,7 @@ export default function ParentsTable({ parents }: ParentsTableType) {
                   </>
                 ) : (
                   <Button onClick={() => handleDelete(parent.id)} size="sm" variant="destructive">
-                    Eliminar
+                    Deshabilitar
                   </Button>
                 )}
               </div>
