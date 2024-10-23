@@ -7,31 +7,19 @@ import { redirect } from "next/navigation";
 const asideMenu = [
   {
     label: "Inicio",
-    link: "/admin",
+    link: "/teachers",
   },
   {
-    label: "Padres",
-    link: "/admin/parents",
+    label: "Mis clases",
+    link: "/teachers/classes",
   },
   {
-    label: "Profesores",
-    link: "/admin/teachers",
+    label: "Foro",
+    link: "/teachers/forum",
   },
   {
-    label: "Grados",
-    link: "/admin/grades",
-  },
-  {
-    label: "Materias",
-    link: "/admin/subjects",
-  },
-  {
-    label: "Clases",
-    link: "/admin/classes",
-  },
-  {
-    label: "Configuración",
-    link: "/admin/config",
+    label: "Chat de padres",
+    link: "/teachers/chat",
   },
 ];
 export default async function Layout({
@@ -40,13 +28,13 @@ export default async function Layout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-  if (!session || session.user.roleId !== RoleEnum.ADMIN) {
+  if (!session || session.user.roleId !== RoleEnum.TEACHER) {
     redirect("/");
   }
   return (
     <div className="flex min-h-screen">
       <aside className="w-full max-w-[200px] bg-admin text-center">
-        <h3 className="my-3 text-4xl font-semibold text-admin-foreground">Admin Panel</h3>
+        <h3 className="my-3 text-4xl font-semibold text-admin-foreground">Panel de profesores</h3>
         <div className="mx-4 flex flex-col gap-4">
           {asideMenu.map((item) => (
             <Button

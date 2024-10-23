@@ -11,7 +11,7 @@ type TeacherSelectMany = Prisma.TeacherFindManyArgs["where"];
 
 export async function getAllTeachers(where?: TeacherSelectMany) {
   const year = await getYear();
-  if (!year) return false;
+  if (!year) return [];
   try {
     const data = prisma.teacher.findMany({
       where: { year, deleteAt: null, ...where },
@@ -20,6 +20,7 @@ export async function getAllTeachers(where?: TeacherSelectMany) {
     return data;
   } catch (error) {
     console.log(error);
+    return [];
   }
 }
 export async function getTeacherById(id: number, { include }: { include?: Prisma.TeacherInclude }) {

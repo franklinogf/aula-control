@@ -18,10 +18,12 @@ import { format } from "date-fns";
 import { E164Number } from "libphonenumber-js/core";
 import { CalendarIcon } from "lucide-react";
 import { ReactElement } from "react";
+import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Control } from "react-hook-form";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+
 export enum FormFieldType {
   INPUT,
   TEXTAREA,
@@ -31,6 +33,7 @@ export enum FormFieldType {
   SELECT,
   MULTI_SELECT,
   SKELETON,
+  TIME_PICKER,
 }
 
 type DefaultCustomFormFieldProps = {
@@ -65,6 +68,10 @@ type FormFieldDatePickerType = {
   dateFormat?: string;
   showTimeSelect?: boolean;
 };
+type FormFieldTimePickerType = {
+  fieldType: FormFieldType.TIME_PICKER;
+  interval?: number;
+};
 type FormFieldPhoneType = {
   fieldType: FormFieldType.PHONE_INPUT;
   placeholder?: string;
@@ -92,6 +99,7 @@ type CustomFormFieldProps = DefaultCustomFormFieldProps &
     | FormFieldCheckboxType
     | FormFieldTextAreaType
     | FormFieldSkeletonType
+    | FormFieldTimePickerType
   );
 
 const RenderInput = ({ field, props }: { field: any; props: CustomFormFieldProps }) => {
@@ -100,7 +108,12 @@ const RenderInput = ({ field, props }: { field: any; props: CustomFormFieldProps
       return (
         <div className="border-dark-500 bg-dark-400 flex rounded-md border">
           <FormControl>
-            <Input disabled={props.disabled} {...field} />
+            <Input
+              type={props.type}
+              placeholder={props.placeholder}
+              disabled={props.disabled}
+              {...field}
+            />
           </FormControl>
         </div>
       );
@@ -167,6 +180,26 @@ const RenderInput = ({ field, props }: { field: any; props: CustomFormFieldProps
               />
             </PopoverContent>
           </Popover>
+        </div>
+      );
+    case FormFieldType.TIME_PICKER:
+      return (
+        <div className="border-dark-500 bg-dark-400 flex rounded-md border">
+          <FormControl>
+            <ReactDatePicker
+              className="w-full p-2"
+              wrapperClassName="w-full"
+              selected={field.value}
+              onChange={(date) => {
+                field.onChange(date);
+              }}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={props.interval ?? 45}
+              timeCaption="Time"
+              dateFormat="h:mm aa"
+            />
+          </FormControl>
         </div>
       );
     case FormFieldType.SELECT:

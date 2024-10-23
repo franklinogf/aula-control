@@ -153,3 +153,11 @@ export const configSchema = z.object({
   name: z.string().min(1, "El nombre es requerido."),
   gradeMax: z.number().min(1, "El máximo de grados es requerido."),
 });
+
+export const courseSchema = z.object({
+  teacher: z.string({ required_error: "El profesor es requerido." }),
+  subject: z.string({ required_error: "La materia es requerida." }),
+  grade: z.string({ required_error: "El grado es requerido." }),
+  day: z.string({ required_error: "El día es requerido." }),
+  time: z.date({ required_error: "La hora es requerido." }),
+});

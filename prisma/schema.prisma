@@ -139,7 +139,7 @@ model Course {
   subject   Subject   @relation(fields: [subjectId], references: [id])
   teacherId Int
   teacher   Teacher   @relation(fields: [teacherId], references: [id])
-  day       String    @db.Char(1)
+  day       String    @db.VarChar(10)
   time      DateTime  @db.Time()
   year      String    @db.Char(5)
   deleteAt  DateTime?
