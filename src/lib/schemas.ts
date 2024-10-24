@@ -198,3 +198,11 @@ export const calificationSchema = z.object({
 export const reportSchema = z.object({
   description: z.string().min(1, "El reporte es requerido."),
 });
+
+export const postSchema = z.object({
+  title: z.string().min(1, "El titulo es requerido."),
+  description: z.string().min(1, "La descripcion es requerido."),
+});
+export const commentSchema = z.object({
+  comment: z.string().min(1, "El comentario es requerido."),
+});

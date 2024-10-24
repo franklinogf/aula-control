@@ -219,7 +219,7 @@ model Report {
 model Post {
   id          Int       @id @default(autoincrement())
   title       String    @db.VarChar(150)
-  description String    @db.VarChar(200)
+  description String    @db.Text
   teacherId   Int
   teacher     Teacher   @relation(fields: [teacherId], references: [id])
   gradeId     String

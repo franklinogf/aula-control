@@ -48,7 +48,7 @@ export async function getTeacherByUserId(id: number) {
       include: {
         grade: true,
         user: true,
-        Post: true,
+        Post: { include: { grade: true, teacher: true } },
         courses: { include: { subject: true, grade: true } },
       },
     });

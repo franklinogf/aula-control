@@ -275,3 +275,17 @@ export async function deleteReport(id: number) {
     console.log(error);
   }
 }
+export async function getStudentsByFamilyId(familyId: number) {
+  const year = await getYear();
+  if (!year) return [];
+  try {
+    const students = await prisma.student.findMany({
+      where: { parentId: familyId, year },
+      include: { grade: true },
+    });
+    return students;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

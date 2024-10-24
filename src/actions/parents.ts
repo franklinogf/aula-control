@@ -19,6 +19,18 @@ export async function getParentById(id: number) {
     console.log(error);
   }
 }
+
+export async function getParentByUserId(id: number) {
+  try {
+    const parent = await prisma.parent.findFirst({
+      where: { user: { id } },
+      include: { user: true, students: { include: { grade: true } } },
+    });
+    return parent;
+  } catch (error) {
+    console.log(error);
+  }
+}
 export async function getAllParents(where?: ParentSelect) {
   const year = await getYear();
   if (!year) return false;
