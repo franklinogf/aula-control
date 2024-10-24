@@ -1,10 +1,14 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RoleEnum } from "@/enums";
+import { useRouter } from "next/navigation";
 import Papa from "papaparse";
 import { ChangeEvent, useState } from "react";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 export default function ImportCsv() {
+  const router = useRouter();
   const [data, setData] = useState<unknown>([]);
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -18,14 +22,13 @@ export default function ImportCsv() {
   };
   const handleSubmit = async () => {
     console.log(data);
-    return;
     try {
-      const response = await fetch("/api/csv/import", {
+      const response = await fetch("http://localhost:3000/api/csv/import", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ roleId: RoleEnum.TEACHER, rows: data }),
       });
 
       if (!response.ok) {
@@ -34,6 +37,8 @@ export default function ImportCsv() {
 
       // Handle successful import
       console.log("CSV imported successfully");
+      toast.success("CSV importado exitosamente");
+      router.refresh();
     } catch (error) {
       console.error(error);
     }
