@@ -80,3 +80,21 @@ export async function getAttendanceByStudent(studentId: number) {
     return null;
   }
 }
+
+export async function getChartDataByStudent(studentId: number) {
+  const year = await getYear();
+  if (!year) return null;
+  try {
+    const absences = await prisma.attendance.findMany({
+      where: { studentId, year, attendanceOption: { name: "a" } },
+    });
+
+    const tardy = await prisma.attendance.findMany({
+      where: { studentId, year, attendanceOption: { name: "t" } },
+    });
+    return { absences, tardy };
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}

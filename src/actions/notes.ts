@@ -38,3 +38,18 @@ export async function getStudentNotes(studentId: number) {
     return null;
   }
 }
+
+export async function getChartDataByStudent(studentId: number) {
+  const year = await getYear();
+  if (!year) return null;
+  try {
+    const notes = await prisma.note.findMany({
+      select: { average1: true, average2: true },
+      where: { studentId, year },
+    });
+    return notes;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
