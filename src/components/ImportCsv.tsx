@@ -38,7 +38,9 @@ export default function ImportCsv() {
       // Handle successful import
       console.log("CSV imported successfully");
       toast.success("CSV importado exitosamente");
-      router.refresh();
+      setTimeout(() => {
+        router.refresh();
+      }, 1000);
     } catch (error) {
       console.error(error);
     }
