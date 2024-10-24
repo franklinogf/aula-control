@@ -80,7 +80,7 @@ export default function StudentAttendanceChart({ studentId }: { studentId: numbe
         setChartData(data);
       }
     });
-  }, []);
+  }, [studentId]);
 
   return (
     <Card>

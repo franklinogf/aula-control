@@ -52,7 +52,7 @@ export default function StudentExamChart({ studentId }: { studentId: number }) {
         setChartData(data);
       }
     });
-  }, []);
+  }, [studentId]);
 
   return (
     <Card>
