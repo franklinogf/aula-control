@@ -12,6 +12,7 @@
     "start": "next start",
     "lint": "next lint",
     "migrate": "npx prisma migrate dev",
+    "database:init": "npx prisma migrate reset",
     "format": "npx prettier ./src --write"
   },
   "dependencies": {
