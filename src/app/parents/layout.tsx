@@ -12,16 +12,16 @@ const asideMenu = [
   },
   {
     label: "Mis hijos",
-    link: "/parents/classes",
+    link: "/parents/students",
   },
   {
     label: "Foro",
     link: "/parents/forum",
   },
-  {
-    label: "Chat",
-    link: "/parents/chat",
-  },
+  // {
+  //   label: "Chat",
+  //   link: "/parents/chat",
+  // },
 ];
 export default async function Layout({
   children,

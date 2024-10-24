@@ -24,3 +24,17 @@ export async function getStudentNote(studentId: number, subjectId: number) {
     return null;
   }
 }
+export async function getStudentNotes(studentId: number) {
+  const year = await getYear();
+  if (!year) return null;
+  try {
+    const result = await prisma.note.findMany({
+      where: { studentId, year },
+      include: { subject: true },
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}

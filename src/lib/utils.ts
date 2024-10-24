@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { addDays, format } from "date-fns";
+import { es } from "date-fns/locale/es";
 import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -30,4 +31,8 @@ export function compareDates(date1: Date, date2?: Date) {
   }
   const formattedDay2 = format(date2, "yyyy-MM-dd");
   return formattedDay1 === formattedDay2;
+}
+
+export function formatDate(date: Date) {
+  return format(date, "PPP", { locale: es });
 }

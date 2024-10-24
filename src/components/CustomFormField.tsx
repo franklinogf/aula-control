@@ -13,8 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { cn, formatDate } from "@/lib/utils";
 import { E164Number } from "libphonenumber-js/core";
 import { CalendarIcon } from "lucide-react";
 import React, { ReactElement } from "react";
@@ -171,7 +170,7 @@ const RenderInput = ({ field, props }: { field: any; props: CustomFormFieldProps
                   !field.value && "text-muted-foreground",
                 )}
               >
-                {field.value ? format(field.value, "PPP") : <span>Selecciona una fecha</span>}
+                {field.value ? formatDate(field.value) : <span>Selecciona una fecha</span>}
                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
               </Button>
             </PopoverTrigger>

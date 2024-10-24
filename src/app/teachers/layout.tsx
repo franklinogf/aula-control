@@ -17,10 +17,10 @@ const asideMenu = [
     label: "Foro",
     link: "/teachers/forum",
   },
-  {
-    label: "Chat",
-    link: "/teachers/chat",
-  },
+  // {
+  //   label: "Chat",
+  //   link: "/teachers/chat",
+  // },
 ];
 export default async function Layout({
   children,

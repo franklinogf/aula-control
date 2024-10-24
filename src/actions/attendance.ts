@@ -65,3 +65,18 @@ export async function editAttendanceToStudent({
     console.log(error);
   }
 }
+
+export async function getAttendanceByStudent(studentId: number) {
+  const year = await getYear();
+  if (!year) return null;
+  try {
+    const result = await prisma.attendance.findMany({
+      where: { studentId, year },
+      include: { attendanceOption: true, course: { include: { subject: true } } },
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
