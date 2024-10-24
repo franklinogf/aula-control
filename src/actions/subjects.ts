@@ -14,6 +14,7 @@ export async function createSubject({ subject }: { subject: string }) {
     return false;
   }
 }
+
 export async function editSubject({
   subject,
   id,

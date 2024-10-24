@@ -161,3 +161,40 @@ export const courseSchema = z.object({
   day: z.string({ required_error: "El día es requerido." }),
   time: z.date({ required_error: "La hora es requerido." }),
 });
+
+export const addStudentSchema = z.object({
+  name: z.string().min(1, "El nombre es requerido."),
+  lastname: z.string().min(1, "El apellido es requerido."),
+  phone: z.string().min(1, "El numero de celular es requerido."),
+  email: z.string().email("Correo invalido").min(1, "El correo es requerido."),
+  dob: z.date(),
+  grade: z.string(),
+});
+
+export const attendanceSchema = z.object({
+  attendanceOption: z.string(),
+});
+
+const calification = z.coerce
+  .string()
+  .max(100)
+  .transform((e) => (e === "" ? null : e));
+
+export const calificationSchema = z.object({
+  note1: calification,
+  note2: calification,
+  note3: calification,
+  note4: calification,
+  exam1: calification,
+  note5: calification,
+  note6: calification,
+  note7: calification,
+  note8: calification,
+  exam2: calification,
+  average1: calification,
+  average2: calification,
+});
+
+export const reportSchema = z.object({
+  description: z.string().min(1, "El reporte es requerido."),
+});

@@ -1,5 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -21,4 +21,13 @@ export function deleteAtDatetime() {
 
 export function formatTime(time: Date) {
   return format(time, "hh:mm a");
+}
+
+export function compareDates(date1: Date, date2?: Date) {
+  const formattedDay1 = format(addDays(date1, 1), "yyyy-MM-dd");
+  if (!date2) {
+    date2 = new Date();
+  }
+  const formattedDay2 = format(date2, "yyyy-MM-dd");
+  return formattedDay1 === formattedDay2;
 }

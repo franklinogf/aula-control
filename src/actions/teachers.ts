@@ -23,13 +23,34 @@ export async function getAllTeachers(where?: TeacherSelectMany) {
     return [];
   }
 }
-export async function getTeacherById(id: number, { include }: { include?: Prisma.TeacherInclude }) {
+export async function getTeacherById(
+  id: number,
+  { include }: { include?: Prisma.TeacherInclude } = {},
+) {
   const year = await getYear();
   if (!year) return false;
   try {
     const data = prisma.teacher.findUnique({
       where: { id },
       include,
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function getTeacherByUserId(id: number) {
+  const year = await getYear();
+  if (!year) return false;
+  try {
+    const data = prisma.teacher.findFirst({
+      where: { user: { id } },
+      include: {
+        grade: true,
+        user: true,
+        Post: true,
+        courses: { include: { subject: true, grade: true } },
+      },
     });
     return data;
   } catch (error) {

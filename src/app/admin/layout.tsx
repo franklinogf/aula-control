@@ -61,7 +61,9 @@ export default async function Layout({
           <LogOutButton />
         </div>
       </aside>
-      <div className="grow px-4">{children}</div>
+      <div className="grow px-4">
+        <div className="container py-4">{children}</div>
+      </div>
     </div>
   );
 }

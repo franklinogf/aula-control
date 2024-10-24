@@ -54,6 +54,19 @@ export async function editCourse({ course, id }: { course: Course; id: number })
   }
 }
 
+export async function getCourseById(id: number) {
+  try {
+    const result = await prisma.course.findUnique({
+      where: { id },
+      include: { subject: true, grade: true, teacher: true },
+    });
+    return result;
+  } catch (error) {
+    return null;
+    console.log(error);
+  }
+}
+
 export async function getAllCoursesWithTrash(where?: Prisma.CourseWhereInput) {
   const year = await getYear();
   if (!year) return [];
@@ -61,6 +74,33 @@ export async function getAllCoursesWithTrash(where?: Prisma.CourseWhereInput) {
     const result = await prisma.course.findMany({
       where: { year, ...where },
       include: { teacher: true, subject: true, grade: true },
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+export async function getSubjectCourseById(id: number) {
+  try {
+    const result = prisma.course.findFirst({
+      where: { id },
+      include: { subject: { select: { id: true } } },
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function getCoursesByTeacher(teacherId: number) {
+  const year = await getYear();
+  if (!year) return [];
+  try {
+    const result = await prisma.course.findMany({
+      where: { teacherId, year },
+      include: { subject: true, grade: true },
     });
     return result;
   } catch (error) {

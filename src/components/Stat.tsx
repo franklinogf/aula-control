@@ -8,7 +8,7 @@ interface StatProps {
 export function Stat({ title, value, background }: StatProps) {
   return (
     <div>
-      <Card className={cn(background, "text-white")}>
+      <Card className={cn(background, "h-full text-white")}>
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>

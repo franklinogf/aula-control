@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { E164Number } from "libphonenumber-js/core";
 import { CalendarIcon } from "lucide-react";
-import { ReactElement } from "react";
+import React, { ReactElement } from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Control } from "react-hook-form";
@@ -62,6 +62,9 @@ type FormFieldInputType = {
   fieldType: FormFieldType.INPUT;
   type?: React.HTMLInputTypeAttribute;
   placeholder?: string;
+  max?: React.InputHTMLAttributes<HTMLInputElement>["max"];
+  min?: React.InputHTMLAttributes<HTMLInputElement>["min"];
+  readonly?: React.InputHTMLAttributes<HTMLInputElement>["readOnly"];
 };
 type FormFieldDatePickerType = {
   fieldType: FormFieldType.DATE_PICKER;
@@ -112,6 +115,9 @@ const RenderInput = ({ field, props }: { field: any; props: CustomFormFieldProps
               type={props.type}
               placeholder={props.placeholder}
               disabled={props.disabled}
+              max={props.max}
+              min={props.min}
+              readOnly={props.readonly}
               {...field}
             />
           </FormControl>
