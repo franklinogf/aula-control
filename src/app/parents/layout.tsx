@@ -2,7 +2,6 @@ import { auth } from "@/auth";
 import { LogOutButton } from "@/components/LogOutButton";
 import { Button } from "@/components/ui/button";
 import { RoleEnum } from "@/enums";
-import { SessionProvider } from "next-auth/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 const asideMenu = [
@@ -51,9 +50,7 @@ export default async function Layout({
         </div>
       </aside>
       <main className="grow px-4">
-        <div className="container py-4">
-          <SessionProvider>{children}</SessionProvider>
-        </div>
+        <div className="container py-4">{children}</div>
       </main>
     </div>
   );
