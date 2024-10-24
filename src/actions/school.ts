@@ -6,8 +6,8 @@ import prisma from "../../prisma/db";
 export async function getYear() {
   try {
     const result = await prisma.school.findFirst({ select: { year: true } });
-    if (result) return result.year;
-    return null;
+    if (!result) return "24-25";
+    return result.year;
   } catch (error) {
     return "24-25";
   }
