@@ -1,14 +1,21 @@
+import { RoleEnum } from "@/enums";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
-  const roles = await prisma.role.createMany({
+  const status = await prisma.status.createMany({
     data: [
-      { type: "admin" },
-      { type: "teacher" },
-      { type: "parent" },
-      { type: "secretary" },
-      { type: "student" },
+      { description: "Activo", status: "A" },
+      { description: "Inactivo", status: "I" },
     ],
+  });
+  const genders = await prisma.gender.createMany({
+    data: [
+      { description: "Masculino", statusId: 1 },
+      { description: "Femenino", statusId: 1 },
+    ],
+  });
+  const roles = await prisma.role.createMany({
+    data: Object.values(RoleEnum).map((role) => ({ type: role })),
   });
   const attendaceOptions = await prisma.attendanceOption.createMany({
     data: [
@@ -21,20 +28,19 @@ async function main() {
 
   const adminUser = await prisma.user.create({
     data: {
-      username: "admin@admin.com",
+      username: "admin",
       password: "12345678",
-      year: "24-25",
-      roleId: "admin",
+      roleId: RoleEnum.ADMIN,
     },
   });
   const schoolInfo = await prisma.school.create({
     data: {
-      name: "Colegio San Carlos",
+      name: "Colegio Aula Control",
       year: "24-25",
     },
   });
 
-  console.log({ roles, attendaceOptions, adminUser, schoolInfo });
+  console.log({ roles, attendaceOptions, adminUser, schoolInfo, status, genders });
 }
 main()
   .then(async () => {
