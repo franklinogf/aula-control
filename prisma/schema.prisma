@@ -30,10 +30,9 @@ model User {
   password String @db.VarChar(100)
   roleId   String @db.VarChar(100)
   role     Role   @relation(fields: [roleId], references: [type])
-  year     String @db.Char(5)
 
-  Parent  Parent[]
-  Teacher Teacher[]
+  Parent  Tutor?
+  Teacher Teacher?
 
   @@map("users")
 }
@@ -45,21 +44,55 @@ model Role {
   @@map("roles")
 }
 
-model Parent {
-  id             Int       @id @default(autoincrement())
-  fatherName     String?   @db.VarChar(100)
-  fatherLastname String?   @db.VarChar(100)
-  motherName     String?   @db.VarChar(100)
-  motherLastname String?   @db.VarChar(100)
-  fatherPhone    String?   @unique @db.VarChar(15)
-  motherPhone    String?   @unique @db.VarChar(15)
-  fatherEmail    String?   @unique @db.VarChar(200)
-  motherEmail    String?   @unique @db.VarChar(200)
-  userId         Int
-  user           User      @relation(fields: [userId], references: [id])
-  students       Student[]
-  year           String    @db.Char(5)
-  deleteAt       DateTime?
+model RelationType {
+  id               Int                @id @default(autoincrement())
+  description      String             @unique @db.VarChar(50)
+  statusId         Int
+  status           Status             @relation(fields: [statusId], references: [id])
+  StudentReference StudentReference[]
+  deleteAt         DateTime?
+
+  @@map("relation_types")
+}
+
+model StudentReference {
+  studentId           String
+  student             Student           @relation(fields: [studentId], references: [id])
+  relationTypeId      Int
+  referenceType       RelationType      @relation(fields: [relationTypeId], references: [id])
+  personalReferenceId String
+  personalReference   PersonalReference @relation(fields: [personalReferenceId], references: [id])
+  canBeContacted      Boolean
+
+  @@id([studentId, personalReferenceId])
+  @@map("student_references")
+}
+
+model PersonalReference {
+  id                   String             @id @default(uuid())
+  name                 String             @db.VarChar(100)
+  lastname             String             @db.VarChar(100)
+  phone                String             @unique @db.VarChar(15)
+  celPhone             String             @unique @db.VarChar(15)
+  email                String             @unique @db.VarChar(200)
+  address              String             @db.VarChar(200)
+  identificationNumber String             @unique @db.VarChar(15)
+  identification       IdentificationType @relation(fields: [identificationTypeId], references: [id])
+  identificationTypeId Int                @unique
+  deleteAt             DateTime?
+  identificationId     Int
+  StudentReference     StudentReference[]
+
+  @@map("personal_references")
+}
+
+model Tutor {
+  id       Int       @id @default(autoincrement())
+  userId   Int       @unique
+  user     User      @relation(fields: [userId], references: [id])
+  students Student[]
+  year     String    @db.Char(5)
+  deleteAt DateTime?
 
   @@map("parents")
 }
@@ -71,7 +104,7 @@ model Teacher {
   phone         String    @unique @db.VarChar(15)
   email         String    @unique @db.VarChar(200)
   dob           DateTime  @db.Date()
-  userId        Int
+  userId        Int       @unique
   user          User      @relation(fields: [userId], references: [id])
   grade         Grade?
   knownSubjects Json
@@ -107,23 +140,65 @@ model Subject {
   @@map("subjects")
 }
 
+model IdentificationType {
+  id                Int                @id @default(autoincrement())
+  description       String             @unique @db.VarChar(50)
+  status            Status             @relation(fields: [statusId], references: [id])
+  statusId          Int
+  student           Student?
+  personalReference PersonalReference?
+
+  @@map("identification_types")
+}
+
+model Status {
+  id             Int                  @id @default(autoincrement())
+  description    String               @unique @db.VarChar(50)
+  status         String               @unique @db.Char(1)
+  gender         Gender[]
+  identification IdentificationType[]
+  relationType   RelationType[]
+  Student        Student[]
+
+  @@map("statuses")
+}
+
+model Gender {
+  id          Int       @id @default(autoincrement())
+  description String    @unique @db.VarChar(50)
+  status      Status    @relation(fields: [statusId], references: [id])
+  statusId    Int
+  students    Student[]
+}
+
 model Student {
-  id         Int          @id @default(autoincrement())
-  name       String       @db.VarChar(100)
-  lastname   String       @db.VarChar(100)
-  phone      String       @unique @db.VarChar(15)
-  email      String       @unique @db.VarChar(200)
-  dob        DateTime     @db.Date()
-  parentId   Int
-  parent     Parent       @relation(fields: [parentId], references: [id])
-  gradeId    Int
-  grade      Grade        @relation(fields: [gradeId], references: [id])
-  year       String       @db.Char(5)
-  Note       Note[]
-  Attendance Attendance[]
-  deleteAt   DateTime?
-  Conduct    Conduct[]
-  Report     Report[]
+  id                   String             @id @default(uuid())
+  name                 String             @db.VarChar(50)
+  lastname             String             @db.VarChar(50)
+  identificationNumber String             @unique @db.VarChar(15)
+  identification       IdentificationType @relation(fields: [identificationTypeId], references: [id])
+  identificationTypeId Int                @unique
+  phone                String             @unique @db.VarChar(15)
+  celPhone             String             @unique @db.VarChar(15)
+  email                String             @unique @db.VarChar(200)
+  dob                  DateTime           @db.Date()
+  parentId             Int
+  parent               Tutor              @relation(fields: [parentId], references: [id])
+  gradeId              Int
+  grade                Grade              @relation(fields: [gradeId], references: [id])
+  created_at           DateTime           @default(now())
+  year                 String             @db.Char(5)
+  notes                Note[]
+  attendances          Attendance[]
+  deleteAt             DateTime?
+  conducts             Conduct[]
+  reports              Report[]
+  genderId             Int
+  gender               Gender             @relation(fields: [genderId], references: [id])
+  references           StudentReference[]
+  address              String             @db.VarChar(200)
+  statusId             Int
+  status               Status             @relation(fields: [statusId], references: [id])
 
   @@map("students")
 }
@@ -149,7 +224,7 @@ model Note {
   id        Int     @id @default(autoincrement())
   subjectId Int
   subject   Subject @relation(fields: [subjectId], references: [id])
-  studentId Int
+  studentId String
   student   Student @relation(fields: [studentId], references: [id])
 
   note1    Int? @db.UnsignedSmallInt()
@@ -183,8 +258,8 @@ model AttendanceOption {
 
 model Attendance {
   id                 Int              @id @default(autoincrement())
-  studentId          Int
-  student            Student          @relation(fields: [studentId], references: [id])
+  student            Student?         @relation(fields: [studentId], references: [id])
+  studentId          String?
   courseId           Int
   course             Course           @relation(fields: [courseId], references: [id])
   date               DateTime         @db.Date()
@@ -198,7 +273,7 @@ model Attendance {
 
 model Conduct {
   id          Int      @id @default(autoincrement())
-  studentId   Int
+  studentId   String
   student     Student  @relation(fields: [studentId], references: [id])
   date        DateTime @db.Date()
   description String?
@@ -207,7 +282,7 @@ model Conduct {
 
 model Report {
   id          Int      @id @default(autoincrement())
-  studentId   Int
+  studentId   String
   student     Student  @relation(fields: [studentId], references: [id])
   description String   @db.Text
   date        DateTime @db.Date()
